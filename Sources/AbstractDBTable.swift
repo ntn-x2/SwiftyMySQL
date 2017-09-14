@@ -69,8 +69,8 @@ open class AbstractDBTable {
             valuesDefinition += "?, "
         }
         
-        columnsDefinition = columnsDefinition.trim(characters: [",", " "])
-        valuesDefinition = valuesDefinition.trim(characters: [",", " "])
+        columnsDefinition = columnsDefinition.trimmingCharacters(in: [",", " "])
+        valuesDefinition = valuesDefinition.trimmingCharacters(in: [",", " "])
         
         query = query.replacingOccurrences(of: "$$$___$$$$$____$$$$", with: columnsDefinition)
         query = query.replacingOccurrences(of: "£££___£££££____££££", with: valuesDefinition)
@@ -80,7 +80,7 @@ open class AbstractDBTable {
     
     internal func prepareReadQuery(filter: [String: NodeRepresentable]?=nil, projection: [String]?=nil, tableName: String) -> QueryDetails {
         
-        let projectionSubQuery = projection?.joined(separator: ", ").trim(characters: [" ", ","])
+        let projectionSubQuery = projection?.joined(separator: ", ").trimmingCharacters(in: [" ", ","])
         let filterSubQuery = filter?.enumerated().reduce((filterValues: "", filterParameters: [NodeRepresentable]())) { query, nextFilter in
             return ( query.filterValues + "\(nextFilter.offset == 0 ? "" : " AND ")\(nextFilter.element.key) = ?", query.filterParameters + [nextFilter.element.value])
         }
@@ -110,7 +110,7 @@ open class AbstractDBTable {
             queryParameters[index] = parameter.value
         }
         
-        query = query.trim(characters: [",", " "])
+        query = query.trimmingCharacters(in: [",", " "])
         
         if filterSubQuery != nil {
             query.append(" WHERE \(filterSubQuery!.filterValues)")
