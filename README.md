@@ -2,15 +2,15 @@
 
 ## What is it?
 
-SwiftyDB is a very lightweight and very basic MySQL utility written in Swift, which provides a high-level of abstraction over the [vapor/mysql](https://github.com/vapor/mysql) library written to be used with Vapor.
+SwiftyDB is a very lightweight and very basic MySQL utility written in Swift, which provides a higher level of abstraction over the [vapor/mysql](https://github.com/vapor/mysql) library written to be used with Vapor.
 
 The basic actors performing this abstraction are:
 - **ResourceDBTable**: A class implementing the common behaviour for all the tables in the database and wrapping a MySQL table. The only thing that subclasses must override, is the name of the table, as shown in the [relative section](#ResourceDBTableSubclass).
-- **DBQueryData**: the base class representing the attributes requirements for a table in each of the CRUD operations (which ones are required for creations, for selections, updates or reads).
+- **DBQueryData**: The base class representing the attributes requirements for a table in each of the CRUD operations (which ones are required for creations, for selections, updates or reads).
 - **DBTransactionOperation**: A single operation (a single query, with no JOINs or special filter clauses, as for now).
 - **DBTransaction**: A class responsible for executing operations on the specified Db. It has support for atomic transactions.
 
-*As for now, there is the caveat of already have the tables in the DB, and  to update their schemas by other means.*
+*As for now, there is the caveat of already have the tables in the DB, and  of updating their schemas by other means, e.g. with a script or through interactive MySQL shell.*
 
 ## Creation of a class reflecting a DB table and its rules
 
@@ -120,6 +120,31 @@ do {
 ```
 *If an error is generated during any of the queries in the transaction,
 the **ROLLBACK** query is automatically executed before rethrowing the error for further handling.*
+
+## Installation
+
+As for now, SwiftyMySQL is only available through **Swift Package Manager** repository management system. It already has all the dependencies it needs to communicate with a MySQL database, so in order to integrate it into your projects, here an example of a **Package.swift** file is provided:
+
+```swift
+import PackageDescription
+
+var package = Package(
+    name: "TestApp",
+    dependencies: [
+        .Package(url: "https://github.com/vapor/mysql.git", Version(1, 2, 0))
+    ]
+)
+```
+
+After updating the **Package.swift** file, just re-fetch the dependencies with
+```
+swift build
+```
+
+or, if using **vapor**, with
+```
+vapor build
+```
 
 ## Future updates
 

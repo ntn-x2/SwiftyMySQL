@@ -24,7 +24,7 @@ public struct DBTransactionOperation {
 public final class DBTransaction {
     
     //The connection to the DB
-    private let connection: Connection
+    let connection: Connection
     
     /**
      Initialize a new connection to the DB.

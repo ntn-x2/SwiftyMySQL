@@ -45,14 +45,14 @@ open class AbstractDBTable {
      Queries the database with a custom query with its associated parameters.
      
      - Parameter queryDetails: A tuple containing the query string (preferably parametrized) and its associated values, if parametrized.
-     - Parameter withConnection: A valid connection to a database against which the query can be executed.
+     - Parameter withDBTransaction: A valid transaction object that will execute the query.
      
      - Throws: MySQLError if the connection is not valid, for several reasons.
      
      - Returns: A Node representing the result of the query.
-    */
-    public static func executeCustomQuery(queryDetails: QueryDetails, withConnection connection: Connection) throws -> Node {
-        return try connection.execute(queryDetails.string, queryDetails.parameters ?? [])
+     */
+    public static func executeCustomQuery(queryDetails: QueryDetails, withDBTransaction dbTransaction: DBTransaction) throws -> Node {
+        return try dbTransaction.connection.execute(queryDetails.string, queryDetails.parameters ?? [])
     }
     
     internal func prepareCreateQuery(data: [String: NodeRepresentable], tableName: String) -> QueryDetails {
