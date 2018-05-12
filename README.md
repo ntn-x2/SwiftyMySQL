@@ -5,7 +5,7 @@
 SwiftyDB is a very lightweight and very basic MySQL utility written in Swift, which provides a higher level of abstraction over the [vapor/mysql](https://github.com/vapor/mysql) library written to be used with Vapor.
 
 The basic actors performing this abstraction are:
-- **ResourceDBTable**: A class implementing the common behaviour for all the tables in the database and wrapping a MySQL table. The only thing that subclasses must override, is the name of the table, as shown in the [relative section](#ResourceDBTableSubclass).
+- **ResourceDBTable**: A class implementing the common behavior for all the tables in the database and wrapping a MySQL table. The only thing that subclasses must override, is the name of the table, as shown in the [relative section](#ResourceDBTableSubclass).
 - **DBQueryData**: The base class representing the attributes requirements for a table in each of the CRUD operations (which ones are required for creations, for selections, updates or reads).
 - **DBTransactionOperation**: A single operation (a single query, with no JOINs or special filter clauses, as for now).
 - **DBTransaction**: A class responsible for executing operations on the specified Db. It has support for atomic transactions.
@@ -35,18 +35,18 @@ class UserCredentialsDBQueryData: DBQueryData {
         static let email = "email"
         static let customPassword = "password"
     }
-    
+
     init(email: String?=nil, password: String?=nil) {
         self.email = email
         self.password = password
-        
+
         super.init()
-        
+
         super.propertiesValues = [
             ColumnKeys.email: self.email,
             ColumnKeys.password: self.password
         ]
-        
+
         super.propertiesAttributes = [
             ColumnKeys.email: [
                 .create: .required,
@@ -74,7 +74,7 @@ The *second* is a dictionary containing, for each unique property ID as key, the
 
 Whenever comes the time of performing a specific query on a DB, the following steps are to be followed:
 
-#### Creation of a **DBTransaction** 
+#### Creation of a **DBTransaction**
 This step has the job of carrying out the requested operations, in both transaction mode or "free" mode (i.e. queries with no dependencies on other ones).
 ```swift
 let transaction = try DBTransaction(database: getDatabase(withConfig: droplet.config))
@@ -82,7 +82,7 @@ let transaction = try DBTransaction(database: getDatabase(withConfig: droplet.co
 #### Creation of instances of **ResourceDBTable** subclasses
 In the example, it is an instance of **UserCredentialsDBTable**, passing as parameter during initialization the needed parameters: data for either *creation*, *filter* or *projection* operation.
 ```swift
-let userCredentialsCreationDBTable = UserCredentialsDBTable(creationData: UserCredentialsDBQueryData(email: "test_email@test.com", password: "backd00red")
+let userCredentialsCreationDBTable = UserCredentialsDBTable(creationData: UserCredentialsDBQueryData(email: "test_email@test.com", password: "test_pass")
 ```
 
 #### Creation of one or more **DBTransactionOperation** instances
@@ -119,7 +119,7 @@ do {
 }
 ```
 *If an error is generated during any of the queries in the transaction,
-the **ROLLBACK** query is automatically executed before rethrowing the error for further handling.*
+the **ROLLBACK** query is automatically executed before re-throwing the error for further handling.*
 
 ## Installation
 
@@ -148,5 +148,5 @@ vapor build
 
 ## Future updates
 
-I have been developing this small abstraction in the last couple of days, for a project I have been working on. I have plans to implement the support for **JOIN**s operations and more complex query filters, like **HAVING BY** and **WHERE**. For now, the way I am overtaking this lack of features, is by creating smaller queries and handling the results at a higher layer, insted of leaving all the login into a singlee query.<br>
+I have been developing this small abstraction in the last couple of days, for a project I have been working on. I have plans to implement the support for **JOIN**s operations and more complex query filters, like **HAVING BY** and **WHERE**. For now, the way I am overtaking this lack of features, is by creating smaller queries and handling the results at a higher layer, instead of leaving all the login into a single query.<br>
 Hope it may help someone in the same situation as me. Regards! :)
